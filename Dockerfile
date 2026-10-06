@@ -191,13 +191,12 @@ RUN wget -q -O models/diffusion_models/qwen_image_2.1_int8_convrot.safetensors \
     echo "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9  models/vae/qwen_image_2.1_vae_bf16.safetensors" | sha256sum -c -
 
 # Community LoRAs + texture-fix VAE (pinned commit + sha256 verified)
+# NOTE: python urllib, NOT wget — wget rewrites the percent-encoding of
+# non-ASCII filenames in HF's signed CDN redirect URLs and gets 403 Forbidden.
 RUN mkdir -p models/loras && \
-    wget -q -O models/loras/qwen_image_2.1_outfit_swap.safetensors \
-      "https://huggingface.co/ausboss/Qwen-Image-2.1-Outfit-Swap-Consistency-LoRA/resolve/226c0a4edcee08328f2369f42f14b305e9671d9c/qwen-image-2.1-outfit-swap.safetensors" && \
-    wget -q -O models/loras/qwen_image_2.1_deai_lighting_v5.safetensors \
-      "https://huggingface.co/RunningHubAI/rh-qwen-image-2.1-lora-2071763057486946305/resolve/c8bb6f8aded8ce622a34f9fdf05f0b554dcaae4f/Qwen%20Image%202.1%E5%8E%BB%E9%99%A4ai%2B%E5%85%89%E5%BD%B1%E4%BC%98%E5%8C%96v5.safetensors" && \
-    wget -q -O models/vae/texture_fix_vae_for_qwen_image_2.1_bf16.safetensors \
-      "https://huggingface.co/madebyollin/texture-fix-vae-for-qwen-image-2.1/resolve/702909b4d408912c7a28fadea06e8b7fdb38ef0c/texture_fix_vae_for_qwen_image_2.1_bf16.safetensors" && \
+    python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co/ausboss/Qwen-Image-2.1-Outfit-Swap-Consistency-LoRA/resolve/226c0a4edcee08328f2369f42f14b305e9671d9c/qwen-image-2.1-outfit-swap.safetensors', 'models/loras/qwen_image_2.1_outfit_swap.safetensors')" && \
+    python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co/RunningHubAI/rh-qwen-image-2.1-lora-2071763057486946305/resolve/c8bb6f8aded8ce622a34f9fdf05f0b554dcaae4f/Qwen%20Image%202.1%E5%8E%BB%E9%99%A4ai%2B%E5%85%89%E5%BD%B1%E4%BC%98%E5%8C%96v5.safetensors', 'models/loras/qwen_image_2.1_deai_lighting_v5.safetensors')" && \
+    python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co/madebyollin/texture-fix-vae-for-qwen-image-2.1/resolve/702909b4d408912c7a28fadea06e8b7fdb38ef0c/texture_fix_vae_for_qwen_image_2.1_bf16.safetensors', 'models/vae/texture_fix_vae_for_qwen_image_2.1_bf16.safetensors')" && \
     echo "4ddfeac5695adaed1f0f78b23fda40919fd2ed6a4af790ced6c1e043dc4ae1f0  models/loras/qwen_image_2.1_outfit_swap.safetensors" | sha256sum -c - && \
     echo "fe4d33f9d316df878343368f9c63eeaafea1da7c5cb76b93adb5d638fed09b98  models/loras/qwen_image_2.1_deai_lighting_v5.safetensors" | sha256sum -c - && \
     echo "36f56608b02077a50a08ea3dbcdb88351298ceba49948f41f9f87186378e6908  models/vae/texture_fix_vae_for_qwen_image_2.1_bf16.safetensors" | sha256sum -c -
