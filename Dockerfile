@@ -207,6 +207,10 @@ RUN python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co
     echo "702a643d3fac81b687159afc231f4dee64cfcac99b9e39d80f1fe7470f1169b0  models/loras/qwen_image_2.1_realism_edit.safetensors" | sha256sum -c - && \
     echo "c2a064eb5266d4d72541f753c8e62dd14df39befd07306b0a973b8c60188e382  models/loras/qwen_image_2.1_realism_nb_lokr.safetensors" | sha256sum -c -
 
+# Detail-fix LoRA (pinned commit + sha256 verified)
+RUN python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co/e-n-v-y/Qwen-Image-2.1-Fix-v2.0/resolve/ea9a5120f5825bbf3253e4b6c007d757a96e5c2d/qwen2.1-detail-fix-2.0.safetensors', 'models/loras/qwen_image_2.1_fix_v2.safetensors')" && \
+    echo "3f00361145703a64c7b9812d7797079820a1f7b0dbb5768b9d3df1f3c7750dfa  models/loras/qwen_image_2.1_fix_v2.safetensors" | sha256sum -c -
+
 # Stage 3: Final image
 FROM base AS final
 
