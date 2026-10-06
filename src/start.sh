@@ -56,6 +56,18 @@ except Exception as e:
 fi
 echo "worker-comfyui: GPU available — $GPU_CHECK"
 
+# ---------------------------------------------------------------------------
+# GPU memory telemetry — log VRAM usage every 5s to stdout (container log).
+# Lets us measure peak VRAM from the worker log stream (API v2 worker logs).
+# ---------------------------------------------------------------------------
+if command -v nvidia-smi >/dev/null 2>&1; then
+    ( while true; do
+        echo "[GPU-TELEMETRY] $(date -u +%Y-%m-%dT%H:%M:%SZ) $(nvidia-smi --query-gpu=memory.used,memory.total,utilization.gpu --format=csv,noheader | tr -d '\n')"
+        sleep 5
+      done ) &
+    echo "worker-comfyui: GPU telemetry started (5s interval)"
+fi
+
 # Ensure ComfyUI-Manager runs in offline network mode inside the container
 comfy-manager-set-mode offline || echo "worker-comfyui - Could not set ComfyUI-Manager network_mode" >&2
 
