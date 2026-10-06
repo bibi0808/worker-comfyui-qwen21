@@ -201,6 +201,12 @@ RUN mkdir -p models/loras && \
     echo "fe4d33f9d316df878343368f9c63eeaafea1da7c5cb76b93adb5d638fed09b98  models/loras/qwen_image_2.1_deai_lighting_v5.safetensors" | sha256sum -c - && \
     echo "36f56608b02077a50a08ea3dbcdb88351298ceba49948f41f9f87186378e6908  models/vae/texture_fix_vae_for_qwen_image_2.1_bf16.safetensors" | sha256sum -c -
 
+# Realism LoRAs (pinned commit + sha256 verified)
+RUN python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co/houseofboern/realism-qwen-image-2.1-edit-lora/resolve/c14b818fbc7eb5954a6c77face8e041512de0926/realism-qwen-image-2.1-edit-lora-e8.safetensors', 'models/loras/qwen_image_2.1_realism_edit.safetensors')" && \
+    python -c "import urllib.request as u; u.urlretrieve('https://huggingface.co/houseofboern/realism-nano-banana-qwen-image-2.1-lokr/resolve/b39837d401947d35731e7fd6c285e1a805bd454c/realism-nb-qwen-image-2.1-lokr-step1000.safetensors', 'models/loras/qwen_image_2.1_realism_nb_lokr.safetensors')" && \
+    echo "702a643d3fac81b687159afc231f4dee64cfcac99b9e39d80f1fe7470f1169b0  models/loras/qwen_image_2.1_realism_edit.safetensors" | sha256sum -c - && \
+    echo "c2a064eb5266d4d72541f753c8e62dd14df39befd07306b0a973b8c60188e382  models/loras/qwen_image_2.1_realism_nb_lokr.safetensors" | sha256sum -c -
+
 # Stage 3: Final image
 FROM base AS final
 
