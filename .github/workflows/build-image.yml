@@ -25,7 +25,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:0.38.2
+            ghcr.io/${{ github.repository }}:0.38.2-lora1
             ghcr.io/${{ github.repository }}:latest
           build-args: |
             MODEL_TYPE=none
